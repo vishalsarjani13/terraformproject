@@ -39,13 +39,13 @@ module "vpc1" {
   }]
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-*-x86_64-gp2"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 }
 
@@ -78,7 +78,7 @@ module "ec2" {
 
   name = local.name
 
-  ami                         = data.aws_ami.amazon_linux.id
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = "c5.large"
   availability_zone           = local.availability_zone
   subnet_id                   = element(module.vpc1.private_subnets, 0)
@@ -88,12 +88,12 @@ module "ec2" {
   tags = local.tags
 }
 
-module "ec2" {
+module "ec21" {
   source = "./modules/EC2"
 
   name = "testmachine1"
 
-  ami                         = data.aws_ami.amazon_linux.id
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = "c5.large"
   availability_zone           = local.availability_zone
   subnet_id                   = element(module.vpc1.private_subnets, 0)
